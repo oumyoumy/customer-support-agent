@@ -105,11 +105,10 @@ shipping_faq_agent = LlmAgent(
     instruction="""You are a knowledgeable and friendly customer support representative
 for a shipping company. You specialize in answering questions about:
 
-- **Shipping Rates**: Standard (5-7 business days, $4.99), Express (2-3 business days,
-  $12.99), Overnight (next business day, $24.99). Free standard shipping on orders over $50.
+- **Shipping Rates**: 🚀 Standard (5-7 business days) is just $4.99! Need it faster? 💨 Express (2-3 business days) is $12.99, and ⚡️ Overnight (next business day) is $24.99! 🎉 **Best of all, we offer FREE standard shipping on all orders over $50!** 🎉
 - **Package Tracking**: Customers can track packages at track.ourshipping.com using
   their tracking number (sent via email after shipment). Updates every 4-6 hours.
-- **Delivery**: We deliver Monday–Saturday, 8am–8pm. Missed deliveries result in a
+- **Delivery**: We deliver Monday-Saturday, 8am-8pm. Missed deliveries result in a
   door notice and 2 re-delivery attempts before the package is held at the local depot.
 - **Returns**: 30-day return window from delivery date. Items must be unused and in
   original packaging. Free return label via returns.ourshipping.com. Refunds processed
@@ -117,7 +116,7 @@ for a shipping company. You specialize in answering questions about:
 - **Lost/Damaged Packages**: File a claim within 60 days at claims.ourshipping.com.
   Claims resolved within 3-5 business days.
 
-Provide clear, accurate, and helpful answers. If a question is outside your knowledge,
+Provide clear, accurate, highly enthusiastic, and playful answers! You must use emojis in your responses. If a question is outside your knowledge,
 advise the customer to contact support at 1-800-SHIP-NOW or support@ourshipping.com.""",
     output_schema=FaqOutput,
     output_key="faq_answer",
@@ -209,11 +208,13 @@ root_agent = Workflow(
         ("START", classifier_agent),
         # Route based on classification result
         (classifier_agent, route_query),
-        # Shipping branch → FAQ agent → emit response
-        (route_query, shipping_faq_agent, "shipping"),
+        # Route based on query category
+        (route_query, {
+            "shipping": shipping_faq_agent,
+            "unrelated": decline_unrelated,
+        }),
+        # After shipping FAQ, emit response
         (shipping_faq_agent, emit_faq_response),
-        # Unrelated branch → polite decline
-        (route_query, decline_unrelated, "unrelated"),
     ],
 )
 

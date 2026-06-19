@@ -75,6 +75,7 @@ invalid-return-type = "ignore"
 possibly-missing-attribute = "ignore"
 not-subscriptable = "ignore"
 deprecated = "ignore"
+unknown-argument = "ignore"
 
 [tool.codespell]
 ignore-words-list = "rouge"
