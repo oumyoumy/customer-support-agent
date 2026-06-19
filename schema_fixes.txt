@@ -1,0 +1,5 @@
+Schema Fixes Applied to bad_schema.sql:
+
+1. Removed the forbidden DROP TABLE statement.
+2. Renamed the table 'userProfile' to 'user_profile' to adhere to snake_case naming conventions.
+3. Added the missing primary key column 'id INT PRIMARY KEY' to the 'posts' table.
